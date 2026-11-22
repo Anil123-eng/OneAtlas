@@ -1,69 +1,180 @@
-import Image from "next/image";
+import db from "@/lib/prisma";
+import ModelSearch from "@/app/components/ModelSearch";
 
-export default function Home() {
+export default async function Home() {
+  const models = await db.aIModel.findMany({
+    where: {
+      slug: {
+        in: ["gpt-4-1", "claude-sonnet-4", "gemini-2-5-pro"],
+      },
+    },
+    include: {
+      provider: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <main className="min-h-screen bg-[#0b0d12] text-white">
+      {/* Navigation */}
+      <nav className="flex items-center justify-between border-b border-[#272b36] px-6 py-5 md:px-12">
+        <div className="text-2xl font-bold tracking-tight">
+          One<span className="text-purple-500">Atlas</span>
+          <span className="ml-1 text-sm text-gray-500">.dev</span>
+        </div>
+
+        <div className="hidden items-center gap-8 text-sm text-gray-400 md:flex">
+          <a href="#models" className="hover:text-white">
+            Models
+          </a>
+          <a href="#rankings" className="hover:text-white">
+            Rankings
+          </a>
+          <a href="#providers" className="hover:text-white">
+            Providers
+          </a>
+          <a href="#compare" className="hover:text-white">
+            Compare
+          </a>
+        </div>
+
+        <button className="rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27]">
+          Explore Models
+        </button>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="px-6 py-24 text-center md:px-12 md:py-32">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-6 inline-flex rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm text-purple-400">
+            AI Model Intelligence Platform
+          </div>
+
+          <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+            Discover the right
+            <br />
+            <span className="text-purple-500">AI model for you.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-400">
+            Explore, compare, and evaluate AI models from leading
+            providers. Find the perfect model for your next project.
+          </p>
+
+          {/* Search Bar */}
+             <div className="mt-10">
+           <ModelSearch />
+        </div>
+
+          <p className="mt-4 text-sm text-gray-500">
+            Popular: GPT · Claude · Gemini · Llama · DeepSeek
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Statistics */}
+      <section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-6 pb-20 md:grid-cols-4 md:px-12">
+        <div className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 text-center">
+          <h2 className="text-3xl font-bold">500+</h2>
+          <p className="mt-2 text-sm text-gray-500">AI Models</p>
         </div>
-      </main>
+
+        <div className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 text-center">
+          <h2 className="text-3xl font-bold">50+</h2>
+          <p className="mt-2 text-sm text-gray-500">Providers</p>
+        </div>
+
+        <div className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 text-center">
+          <h2 className="text-3xl font-bold">100+</h2>
+          <p className="mt-2 text-sm text-gray-500">Benchmarks</p>
+        </div>
+
+        <div className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 text-center">
+          <h2 className="text-3xl font-bold">24/7</h2>
+          <p className="mt-2 text-sm text-gray-500">Model Intelligence</p>
+        </div>
+      </section>
+
+            {/* Featured Models */}
+
+      {/* Featured Models */}
+<section
+  id="models"
+  className="mx-auto max-w-7xl px-6 pb-24 md:px-12"
+>
+  <div className="mb-8 flex items-center justify-between">
+    <div>
+      <h2 className="text-2xl font-bold">Featured Models</h2>
+      <p className="mt-2 text-sm text-gray-500">
+        Explore some of the most popular AI models.
+      </p>
     </div>
+
+    <button className="hidden rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27] sm:block">
+      View All Models →
+    </button>
+  </div>
+
+  <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+    {models.map((model) => (
+      <div
+        key={model.id}
+        className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 transition hover:border-purple-500/50"
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-xl font-bold text-purple-400">
+            {model.provider.name.charAt(0)}
+          </div>
+
+          <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs text-purple-400">
+            {model.modelType}
+          </span>
+        </div>
+
+        <h3 className="mt-5 text-lg font-semibold">
+          {model.name}
+        </h3>
+
+        <p className="mt-1 text-sm text-gray-500">
+          {model.provider.name}
+        </p>
+
+        <p className="mt-4 text-sm leading-6 text-gray-400">
+          {model.description}
+        </p>
+
+        <div className="mt-6 grid grid-cols-2 gap-4 border-t border-[#272b36] pt-4">
+          <div>
+            <p className="text-xs text-gray-500">
+              Context Window
+            </p>
+
+            <p className="mt-1 font-medium">
+              {model.contextWindow.toLocaleString()} tokens
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-500">
+              Input Price
+            </p>
+
+            <p className="mt-1 font-medium">
+              ${model.inputPrice.toString()} / 1M tokens
+            </p>
+          </div>
+        </div>
+
+        <button className="mt-5 w-full rounded-lg border border-[#333744] py-2.5 text-sm hover:bg-[#1a1e27]">
+          View Details →
+        </button>
+      </div>
+    ))}
+  </div>
+</section>
+          
+    </main>
   );
 }

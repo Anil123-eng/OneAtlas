@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// AI companies and laboratories
+model Provider {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  website     String?
+  logoUrl     String?
+  models      AIModel[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// AI models
+model AIModel {
+  id            String           @id @default(cuid())
+  name          String
+  slug          String           @unique
+  description   String
+  modelType     String
+  contextWindow Int
+  inputPrice    Decimal          @db.Decimal(10, 6)
+  outputPrice   Decimal          @db.Decimal(10, 6)
+  modalities    String[]
+  capabilities  String[]
+  releaseDate   DateTime?
+  providerId    String
+  provider      Provider         @relation(fields: [providerId], references: [id])
+  benchmarks   ModelBenchmark[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([providerId])
+  @@index([modelType])
+}
+
+// AI performance benchmarks
+model Benchmark {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  category    String
+  description String?
+  results     ModelBenchmark[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+// Model benchmark scores
+model ModelBenchmark {
+  id          String    @id @default(cuid())
+  modelId     String
+  benchmarkId String
+  score       Decimal   @db.Decimal(8, 4)
+  model       AIModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  benchmark   Benchmark @relation(fields: [benchmarkId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([modelId, benchmarkId])
+  @@index([benchmarkId])
+}
