@@ -1,6 +1,8 @@
 import db from "@/lib/prisma";
 import ModelSearch from "@/app/components/ModelSearch";
 
+export const instant = false;
+
 export default async function Home() {
   const models = await db.aIModel.findMany({
     where: {
