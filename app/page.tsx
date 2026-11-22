@@ -1,3 +1,4 @@
+ 
 import db from "@/lib/prisma";
 import ModelSearch from "@/app/components/ModelSearch";
 
@@ -28,23 +29,26 @@ export default async function Home() {
         </div>
 
         <div className="hidden items-center gap-8 text-sm text-gray-400 md:flex">
-          <a href="#models" className="hover:text-white">
+          <a href="/models" className="hover:text-white">
             Models
           </a>
-          <a href="#rankings" className="hover:text-white">
+          <a href="/rankings" className="hover:text-white">
             Rankings
           </a>
-          <a href="#providers" className="hover:text-white">
+          <a href="/providers" className="hover:text-white">
             Providers
           </a>
-          <a href="#compare" className="hover:text-white">
+          <a href="/compare" className="hover:text-white">
             Compare
           </a>
         </div>
 
-        <button className="rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27]">
+        <a
+          href="/models"
+          className="rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27]"
+        >
           Explore Models
-        </button>
+        </a>
       </nav>
 
       {/* Hero Section */}
@@ -66,9 +70,9 @@ export default async function Home() {
           </p>
 
           {/* Search Bar */}
-             <div className="mt-10">
-           <ModelSearch />
-        </div>
+          <div className="mt-10">
+            <ModelSearch />
+          </div>
 
           <p className="mt-4 text-sm text-gray-500">
             Popular: GPT · Claude · Gemini · Llama · DeepSeek
@@ -99,84 +103,88 @@ export default async function Home() {
         </div>
       </section>
 
-            {/* Featured Models */}
-
       {/* Featured Models */}
-<section
-  id="models"
-  className="mx-auto max-w-7xl px-6 pb-24 md:px-12"
->
-  <div className="mb-8 flex items-center justify-between">
-    <div>
-      <h2 className="text-2xl font-bold">Featured Models</h2>
-      <p className="mt-2 text-sm text-gray-500">
-        Explore some of the most popular AI models.
-      </p>
-    </div>
-
-    <button className="hidden rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27] sm:block">
-      View All Models →
-    </button>
-  </div>
-
-  <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-    {models.map((model) => (
-      <div
-        key={model.id}
-        className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 transition hover:border-purple-500/50"
+      <section
+        id="models"
+        className="mx-auto max-w-7xl px-6 pb-24 md:px-12"
       >
-        <div className="flex items-start justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-xl font-bold text-purple-400">
-            {model.provider.name.charAt(0)}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">Featured Models</h2>
+            <p className="mt-2 text-sm text-gray-500">
+              Explore some of the most popular AI models.
+            </p>
           </div>
 
-          <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs text-purple-400">
-            {model.modelType}
-          </span>
+          <a
+            href="/models"
+            className="hidden rounded-lg border border-[#333744] px-4 py-2 text-sm hover:bg-[#1a1e27] sm:block"
+          >
+            View All Models →
+          </a>
         </div>
 
-        <h3 className="mt-5 text-lg font-semibold">
-          {model.name}
-        </h3>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {models.map((model) => (
+            <div
+              key={model.id}
+              className="rounded-xl border border-[#272b36] bg-[#12151c] p-6 transition hover:border-purple-500/50"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-xl font-bold text-purple-400">
+                  {model.provider.name.charAt(0)}
+                </div>
 
-        <p className="mt-1 text-sm text-gray-500">
-          {model.provider.name}
-        </p>
+                <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs text-purple-400">
+                  {model.modelType}
+                </span>
+              </div>
 
-        <p className="mt-4 text-sm leading-6 text-gray-400">
-          {model.description}
-        </p>
+              <h3 className="mt-5 text-lg font-semibold">
+                {model.name}
+              </h3>
 
-        <div className="mt-6 grid grid-cols-2 gap-4 border-t border-[#272b36] pt-4">
-          <div>
-            <p className="text-xs text-gray-500">
-              Context Window
-            </p>
+              <p className="mt-1 text-sm text-gray-500">
+                {model.provider.name}
+              </p>
 
-            <p className="mt-1 font-medium">
-              {model.contextWindow.toLocaleString()} tokens
-            </p>
-          </div>
+              <p className="mt-4 text-sm leading-6 text-gray-400">
+                {model.description}
+              </p>
 
-          <div>
-            <p className="text-xs text-gray-500">
-              Input Price
-            </p>
+              <div className="mt-6 grid grid-cols-2 gap-4 border-t border-[#272b36] pt-4">
+                <div>
+                  <p className="text-xs text-gray-500">
+                    Context Window
+                  </p>
 
-            <p className="mt-1 font-medium">
-              ${model.inputPrice.toString()} / 1M tokens
-            </p>
-          </div>
+                  <p className="mt-1 font-medium">
+                    {model.contextWindow.toLocaleString()} tokens
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500">
+                    Input Price
+                  </p>
+
+                  <p className="mt-1 font-medium">
+                    ${model.inputPrice.toString()} / 1M tokens
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href={`/models/${model.slug}`}
+                className="mt-5 block w-full rounded-lg border border-[#333744] py-2.5 text-center text-sm hover:bg-[#1a1e27]"
+              >
+                View Details →
+              </a>
+            </div>
+          ))}
         </div>
-
-        <button className="mt-5 w-full rounded-lg border border-[#333744] py-2.5 text-sm hover:bg-[#1a1e27]">
-          View Details →
-        </button>
-      </div>
-    ))}
-  </div>
-</section>
-          
+      </section>
     </main>
   );
 }
+ 
